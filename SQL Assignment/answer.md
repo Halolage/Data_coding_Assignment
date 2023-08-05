@@ -13,3 +13,6 @@ CREATE INDEX idx_customer_id ON tblSubscriptionInfo (customer_id);
 
 - 2\. Caching. Implement caching mechanisms at the application level to reduce the frequency of update queries. Cache frequently accessed customer data, including contact phone numbers, to reduce the need for frequent updates.We can start with configuring a caching library or framework. 
 
+- 3\. Database Partitioning. Depending on the size of your table, consider partitioning it based on certain criteria (e.g., customer ID ranges) to improve query performance.
+
+- 4\. Database Sharding. If your application has a large number of customers, sharding the database based on some criteria (e.g., customer regions) can distribute the load and improve update performance.
