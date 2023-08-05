@@ -44,3 +44,51 @@ FROM tblSubscriptionInfo
 GROUP BY customer_id, customer_name
 HAVING COUNT(DISTINCT product_id) > 2;
 ```
+
+- 4\. product with the most/2ndmost/3rdmost number of subscribers in 2022;
+```
+SELECT product_name, COUNT(*) AS num_subscribers
+FROM tblSubscriptionInfo
+WHERE YEAR(subscription_start_date) = 2022
+GROUP BY product_name
+ORDER BY num_subscribers DESC
+LIMIT 1;
+```
+```
+SELECT product_name, COUNT(*) AS num_subscribers
+FROM tblSubscriptionInfo
+WHERE YEAR(subscription_start_date) = 2022
+GROUP BY product_name
+ORDER BY num_subscribers DESC
+LIMIT 1 OFFSET 1;
+```
+```
+SELECT product_name, COUNT(*) AS num_subscribers
+FROM tblSubscriptionInfo
+WHERE YEAR(subscription_start_date) = 2022
+GROUP BY product_name
+ORDER BY num_subscribers DESC
+LIMIT 1 OFFSET 2;
+```
+
+- 5\. number of subscribers who have re-subscribed more than once for each product;
+```
+SELECT COUNT(*) AS num_subscribers
+FROM (
+    SELECT customer_id, product_id
+    FROM tblSubscriptionInfo
+    GROUP BY customer_id, product_id
+    HAVING COUNT(*) > 1
+) AS re_subscribers;
+```
+
+- 6\. subscribers who have re-subscribed a higher version of the product in 2023 - for example Autocad 2022 to Autocad 2023.
+```
+SELECT DISTINCT s1.customer_id, s1.customer_name
+FROM tblSubscriptionInfo s1
+JOIN tblSubscriptionInfo s2 ON s1.customer_id = s2.customer_id
+WHERE YEAR(s1.subscription_start_date) = 2022
+  AND YEAR(s2.subscription_start_date) = 2023
+  AND s1.product_id < s2.product_id;
+
+```
